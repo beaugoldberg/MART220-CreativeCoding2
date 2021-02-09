@@ -7,10 +7,12 @@ var idleObjects = [];
 var walkObjects = [];
 var walkReverseObjects = [];
 var jumpObjects = [];
+var extraObjects = [];
 var idle_animations; 
 var walk_animations;
 var walkReverse_animations;
 var jump_animations;
+var extra_images;
 var curAnimation = idle;
 var curAnimationObjects = idleObjects;
 var i = 0;
@@ -22,6 +24,7 @@ function preload() {
     walk_animations = loadStrings('files/walk.txt');
     walkReverse_animations = loadStrings('files/walk_reverse.txt');
     jump_animations = loadStrings('files/jump.txt');
+    extra_images = loadStrings('files/extra.txt');
 }
 
 // create the canvas
@@ -32,6 +35,7 @@ function setup() {
         walkObjects.push(new character('assets/' + walk_animations[i],0,0));
         walkReverseObjects.push(new character('assets/' + walkReverse_animations[i],-300,0));
         jumpObjects.push(new character('assets/' + jump_animations[i],0,0));
+        extraObjects.push(new character('assets/' + extra_images[i], random(300), random(300)))
         idle[i] = idleObjects[i].getImage();
         walk[i] = walkObjects[i].getImage();
         walk_reverse[i] = walkReverseObjects[i].getImage();
@@ -49,6 +53,9 @@ function draw() {
     [curAnimation, curAnimationObjects, i] = animationContoller(curAnimation,curAnimationObjects, i);
     // draw each frame based on the index in the array
     image(curAnimation[i], curAnimationObjects[i].getX(), curAnimationObjects[i].getY());
+    for (var i = 0; i < extraObjects.length; i++) {
+        image(extraObjects[i].getImage(), extraObjects[i].getX(), extraObjects[i].getY());
+    }
 }
 
 function incrementIndex()
