@@ -1,0 +1,15 @@
+assets/Walk1.png
+assets/Walk2.png
+assets/Walk3.png
+assets/Walk4.png
+assets/Walk5.png
+assets/Walk6.png
+assets/Walk7.png
+assets/Walk8.png
+assets/Walk9.png
+assets/Walk10.png
+assets/Walk11.png
+assets/Walk12.png
+assets/Walk13.png
+assets/Walk14.png
+assets/Walk15.png
