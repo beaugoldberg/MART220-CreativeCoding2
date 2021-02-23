@@ -2,6 +2,10 @@ var characterObjects;
 var idle, walk, walk_rv,jump; 
 var i = 0;
 var x = 0;
+var cat, branches;
+let particles = [];
+var healthCat = 50; 
+var healthBranches = 50;
 
 // Bring in all the assets from our folder
 function preload() {
@@ -21,7 +25,7 @@ function setup() {
     characterObjects.addAnimation('jump',jump[0],jump[jump.length-1]);
     
     cat = createSprite(100,680);
-    branches = createSprite(1400,100);
+    branches = createSprite(1500,660);
     cat.addImage(loadImage('assets/extra (1).png'));
     branches.addImage(loadImage('assets/extra (2).png'));
 }
@@ -30,8 +34,6 @@ function setup() {
 function draw() {
 
     background(120);
-    textSize(36);
-    text('Exit -->', 1600, 300);
     
     if (keyDown('a')) { 
         characterObjects.changeAnimation('walk_rv'); 
@@ -54,7 +56,6 @@ function draw() {
         }
     }
     else if (keyDown('w')) {
-        characterObjects.changeAnimation('jump');
         characterObjects.velocity.y -= .1;
         if (cat != null) {
             if(characterObjects.collide(cat))  { characterObjects.changeAnimation('idle');}
@@ -72,20 +73,54 @@ function draw() {
             if(characterObjects.collide(branches))  { characterObjects.changeAnimation('idle'); }
         }
     }
+    else if (keyDown('x')) {
+        characterObjects.changeAnimation('jump');
+        if (cat != null) {
+            if(dist(characterObjects.position.x,characterObjects.position.y,cat.position.x,cat.position.y) < 520) {
+                createParticles(cat.position.x,cat.position.y);
+                healthCat -= 1;
+                if (healthCat <= 0) {
+                    cat.remove();
+                    cat = null;
+                }
+            }
+        }
+        if (branches != null) {
+            if(dist(characterObjects.position.x,characterObjects.position.y,branches.position.x,branches.position.y) < 650)
+            {
+                createParticles(branches.position.x, branches.position.y);
+                healthBranches -= 1;
+                if (healthBranches <= 0) {
+                    branches.remove();
+                    branches = null;
+                }
+            }
+        }
+    }
     else { 
         characterObjects.changeAnimation('idle'); 
         characterObjects.velocity.x = 0;
         characterObjects.velocity.y = 0;
     }
 
-    if (characterObjects.position.x - 300 >= 1800) {
+    if (branches == null && cat == null) {
         textSize(40);
         text('You Win!!', 800, 100);
     }
 
     characterObjects.debug = mouseIsPressed;
-    branches.debug = mouseIsPressed;
-    cat.debug = mouseIsPressed;
     drawSprites();
+}
+
+function createParticles(x,y) {
+    for (let i = 0; i < 5;i++) {
+        let p = new Particle(x,y);
+        particles.push(p);
+    }
+    for (let i = particles.length - 1; i>= 0; i--) {
+        particles[i].update();
+        particles[i].show();
+        if (particles[i].finished()) { particles.splice(i,1); }
+    }
 }
 
